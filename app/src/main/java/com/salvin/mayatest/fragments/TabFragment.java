@@ -1,5 +1,6 @@
 package com.salvin.mayatest.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -8,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,6 +27,19 @@ public class TabFragment extends Fragment {
     public static ViewPager viewPager;
     public static int int_items = 2 ;
 
+    SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences;
+
+    boolean lnBangla;
+    String[] titles = {"Popular", "bangla"};
+    MyAdapter myAdapter;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,16 +50,15 @@ public class TabFragment extends Fragment {
         tabLayout = (TabLayout) x.findViewById(R.id.tabs);
         viewPager = (ViewPager) x.findViewById(R.id.viewpager);
 
-        /**
-         *Set an Apater for the View Pager
-         */
-        viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
+        sharedPreferences = getActivity().getSharedPreferences("localinfo", getActivity().MODE_PRIVATE);
+        lnBangla = sharedPreferences.getBoolean("lnBangla", false);
 
-        /**
-         * Now , this is a workaround ,
-         * The setupWithViewPager dose't works without the runnable .
-         * Maybe a Support Library Bug .
-         */
+
+        myAdapter = new MyAdapter(getChildFragmentManager());
+
+        updateUI(lnBangla);
+
+        viewPager.setAdapter(myAdapter);
 
         tabLayout.post(new Runnable() {
             @Override
@@ -55,16 +71,26 @@ public class TabFragment extends Fragment {
 
     }
 
+    public void updateUI(boolean lnBangla){
+        System.out.println("change title");
+
+        if (lnBangla) {
+            titles[0] = "পপুলার";
+            titles[1] = "উত্তর";
+        }
+        else {
+            titles[0] = "Popular";
+            titles[1] = "Answered";
+        }
+        System.out.println(titles[0]);
+        myAdapter.notifyDataSetChanged();
+    }
+
     class MyAdapter extends FragmentPagerAdapter {
 
         public MyAdapter(FragmentManager fm) {
             super(fm);
         }
-
-        /**
-         * Return fragment with respect to Position .
-         */
-
         @Override
         public Fragment getItem(int position)
         {
@@ -74,29 +100,45 @@ public class TabFragment extends Fragment {
             }
             return null;
         }
-
         @Override
-        public int getCount() {
-
-            return int_items;
-
+        public int getCount() {return int_items;
         }
-
-        /**
-         * This method returns the title of the tab according to the position.
-         */
 
         @Override
         public CharSequence getPageTitle(int position) {
 
+
             switch (position){
                 case 0 :
-                    return "Popular";
+                    return titles[position];
                 case 1 :
-                    return "Answered";
+                    return titles[position];
             }
             return null;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_language) {
+            System.out.println("from fragment menu");
+            lnBangla = !lnBangla;
+            editor = getActivity().getSharedPreferences("localinfo", getActivity().MODE_PRIVATE).edit();
+            editor.putBoolean("lnBangla", lnBangla);
+            editor.commit();
+            updateUI(lnBangla);;
+            return true;
+        }
+
+
+        return false;
     }
 
 }

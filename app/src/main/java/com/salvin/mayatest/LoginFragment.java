@@ -82,6 +82,7 @@ public class LoginFragment extends Fragment implements TwitterConnectHelper.OnTw
 
         fbConnectHelper = new FbConnectHelper(this,this);
         twitterConnectHelper = new TwitterConnectHelper(getActivity(), this);
+
     }
 
     @OnClick(R.id.login_google)

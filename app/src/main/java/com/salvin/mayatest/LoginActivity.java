@@ -1,20 +1,24 @@
 package com.salvin.mayatest;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 
+import com.salvin.mayatest.helpers.InternetConnectionDetector;
 import com.salvin.mayatest.managers.SharedPreferenceManager;
 import com.salvin.mayatest.model.UserModel;
+
 
 
 public class LoginActivity extends FragmentActivity {
 
     Button mobileLogin, socialLogin;
-
+    private InternetConnectionDetector internetconnectiondetector;
 
     public UserModel userModel;
     @Override
@@ -24,6 +28,21 @@ public class LoginActivity extends FragmentActivity {
 
         mobileLogin = (Button) findViewById(R.id.mobileLogin);
         socialLogin = (Button) findViewById(R.id.socialLogin);
+
+        internetconnectiondetector = new InternetConnectionDetector(getApplicationContext());
+
+        if(!internetconnectiondetector.isConnectedToInternet()){
+            new AlertDialog.Builder(this)
+                    .setTitle("Sorry, No Internet Connection")
+                    .setMessage("Please, check your connection.")
+                    .setPositiveButton("Close the App", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with delete
+                           finish();
+                        }
+                    })
+                    .show();
+        }
 
         userModel = SharedPreferenceManager.getSharedInstance().getUserModelFromPreferences();
         if (userModel != null) {

@@ -11,4 +11,14 @@
     <string name="facebook_app_id">1107757105928354</string>
     <string name="ACCOUNT_KIT_CLIENT_TOKEN">efd14c5c8d696d37a816050ee4633f5d</string>
     <string name="ak_login_protocol_scheme">ak1107757105928354</string>
+
+    <string name="app_name_bangla"> মায়া ফিড </string>
+    <string name="nav_item_feed_bangla">ফিড</string>
+    <string name="nav_item_mymaya_bangla">মায়া</string>
+    <string name="nav_item_logout_bangla">লগআউট</string>
+
+    <string name="app_name_english">Maya Feed</string>
+    <string name="nav_item_feed">Feed</string>
+    <string name="nav_item_mymaya">Maya</string>
+    <string name="nav_item_logout">Logout</string>
 </resources>

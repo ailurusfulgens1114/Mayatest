@@ -33,7 +33,7 @@ public class MyMayaFragment extends Fragment {
 
     TextView userName, userProfile, userEmail, userGender;
 
-    String user_name, user_email, user_profile_url, user_gender, userBannerPath;
+    String user_name, user_email, user_profile_url, user_gender, userBannerPath, userLocalImagePath;
 
     int userColor;
 
@@ -55,6 +55,7 @@ public class MyMayaFragment extends Fragment {
 
         imageLoader = ImageLoader.getInstance();
 
+        
         editor = getActivity().getSharedPreferences("localinfo", getActivity().MODE_PRIVATE).edit();
         sharedPreferences = getActivity().getSharedPreferences("localinfo", getActivity().MODE_PRIVATE);
 
@@ -66,6 +67,7 @@ public class MyMayaFragment extends Fragment {
 
         userColor = sharedPreferences.getInt("userColor", R.color.maya);
         userBannerPath = sharedPreferences.getString("userBannerPath", "");
+        userLocalImagePath = sharedPreferences.getString("userLocalImagePath", "");
 
         headerCoverImage = (ImageView) view.findViewById(R.id.header_cover_image);
         userProfileImage = (ImageButton) view.findViewById(R.id.user_profile_photo);
@@ -85,6 +87,7 @@ public class MyMayaFragment extends Fragment {
         userEmail.setText(user_email);
         userGender.setText(user_gender);
 
+
         if(!userBannerPath.isEmpty() || !userBannerPath.equals(null))
             imageLoader.displayImage(userBannerPath, headerCoverImage);
 
@@ -101,13 +104,12 @@ public class MyMayaFragment extends Fragment {
             }
         });
 
+
         userProfileImage.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                Intent intent = new Intent(
-                        Intent.ACTION_PICK,
+                Intent intent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 2);
+                startActivityForResult(intent, 1);
 
             }
         });
@@ -145,17 +147,36 @@ public class MyMayaFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        try{
-        System.out.println(data.getData().toString());
-        Uri selectedImageUri = Uri.parse(data.getDataString());
-        String photoPath = "file://" + getRealPathFromURI(selectedImageUri).replaceAll("[* *]","\\ ");
-        System.out.println(photoPath);
-        editor.putString("userBannerPath", photoPath);
-        editor.commit();
-            imageLoader.displayImage(photoPath,headerCoverImage);
+        if(requestCode == 2){
+            try{
+                System.out.println(data.getData().toString());
+                Uri selectedImageUri = Uri.parse(data.getDataString());
+                String photoPath = "file://" + getRealPathFromURI(selectedImageUri).replaceAll("[* *]","\\ ");
+                System.out.println(photoPath);
+                editor.putString("userBannerPath", photoPath);
+                editor.commit();
+                imageLoader.displayImage(photoPath,headerCoverImage);
 
-        }catch (Exception e){
-            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
+            }catch (Exception e){
+                Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+        if(requestCode == 1){
+            try{
+                System.out.println(data.getData().toString());
+                Uri selectedImageUri = Uri.parse(data.getDataString());
+                String photoPath = "file://" + getRealPathFromURI(selectedImageUri).replaceAll("[* *]","\\ ");
+                System.out.println(photoPath);
+                editor.putString("userLocalImagePath", photoPath);
+                editor.commit();
+                imageLoader.displayImage(photoPath,userProfileImage);
+
+            }catch (Exception e){
+                Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
+            }
+
         }
 
     }

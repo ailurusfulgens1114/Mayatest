@@ -1,5 +1,6 @@
 package com.salvin.mayatest;
 
+import android.content.SharedPreferences;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,9 +31,17 @@ public class MainActivity extends AppCompatActivity {
     FragmentTransaction mFragmentTransaction;
     ImageView ivHeaderPhoto;
     ImageLoader imageLoader;
-    AsyncTask asyncTask;
-    String userImageUrl;
+
     String user_name = "", user_email = "", user_profile_url = "", user_gender = "";
+    boolean lnBangla = false;
+
+    SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences;
+
+    ActionBarDrawerToggle mDrawerToggle;
+    android.support.v7.widget.Toolbar toolbar;
+    Menu menu;
+    MenuItem nav_item_feed, nav_item_mymaya, nav_item_logout ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         mNavigationView = (NavigationView) findViewById(R.id.navdrawer) ;
         imageLoader = ImageLoader.getInstance();
 
+
+        sharedPreferences = getSharedPreferences("localinfo", MODE_PRIVATE);
+        lnBangla = sharedPreferences.getBoolean("lnBangla", false);
 
         UserModel userModel = getUserModelFromIntent();
         if(userModel!=null){
@@ -54,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             user_profile_url = userModel.profilePic;
             user_gender = userModel.gender;
 
-
         }
 
 
@@ -65,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Setup click events on the Navigation View Items.
          */
+
+
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -93,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(menuItem.getItemId() == R.id.nav_item_logout){
                     SharedPreferenceManager.getSharedInstance().clearAllPreferences();
+
                     startLoginActivity();
                 }
 
@@ -105,18 +122,41 @@ public class MainActivity extends AppCompatActivity {
          * Setup Drawer Toggle of the Toolbar
          */
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, toolbar,R.string.app_name,
+        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, toolbar,R.string.app_name,
                 R.string.app_name);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mDrawerToggle.syncState();
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
+        Menu menu = mNavigationView.getMenu();
+        nav_item_feed = menu.findItem(R.id.nav_item_feed);
+        nav_item_mymaya = menu.findItem(R.id.nav_item_mymaya);
+        nav_item_logout = menu.findItem(R.id.nav_item_logout);
+
+        updateUI(lnBangla);
 
     }
 
+    public void updateUI(boolean lnBangla){
+
+        if(lnBangla){
+             toolbar.setTitle(R.string.app_name_bangla);
+             nav_item_feed.setTitle(R.string.nav_item_feed_bangla);
+             nav_item_mymaya.setTitle(R.string.nav_item_mymaya_bangla);
+             nav_item_logout.setTitle(R.string.nav_item_logout_bangla);
+        }else{
+            toolbar.setTitle(R.string.app_name_english);
+            nav_item_feed.setTitle(R.string.nav_item_feed);
+            nav_item_mymaya.setTitle(R.string.nav_item_mymaya);
+            nav_item_logout.setTitle(R.string.nav_item_logout);
+        }
+    }
 
     public void onSignOut(View view) {
         finish();
@@ -134,6 +174,29 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finishAffinity();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+       return  super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_language) {
+            lnBangla = !lnBangla;
+            editor = getSharedPreferences("localinfo", MODE_PRIVATE).edit();
+            editor.putBoolean("lnBangla", lnBangla);
+            editor.commit();
+            updateUI(lnBangla);
+            return true;
+        }
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+
+        }
+
 
 }
 
