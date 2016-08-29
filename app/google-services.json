@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "664928389206",
+    "project_id": "mayatest-141713"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664928389206:android:1b240afa26f92d70",
+        "android_client_info": {
+          "package_name": "com.salvin.mayatest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664928389206-pu1vd87opno7q8r3cahpvih6gjhk2nno.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.salvin.mayatest",
+            "certificate_hash": "59580962B750E79C16A1A851D1F0281C28027C36"
+          }
+        },
+        {
+          "client_id": "664928389206-qmp35q81d6g7b263rh4vfer2g6ivm3ja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxNC9Z54ny9S3bULRulhqjEPDHcwS3QuU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="158dp"
+            android:layout_height="60dp"
+            android:id="@+id/mobileLogin"
+            android:background="@color/md_grey_300"
+            android:elevation="5dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="30dp"
+            android:text="Mobile"
+
+            android:layout_gravity="left|bottom" />
+
+        <Button
+            android:layout_width="132dp"
+            android:layout_height="60dp"
+            android:id="@+id/socialLogin"
+            android:layout_toRightOf="@+id/mobileLogin"
+            android:background="@color/maya"
+            android:textColor="@color/white"
+            android:layout_margin="30dp"
+            android:elevation="10dp"
+            android:layout_centerInParent="true"
+            android:text="Social"
+            android:layout_gravity="right|bottom" />
+    </FrameLayout>
+
+</RelativeLayout>

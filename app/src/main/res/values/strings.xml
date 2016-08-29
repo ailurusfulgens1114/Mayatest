@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Mayatest</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_signup">SignupActivity</string>
+
+    <string name="facebook_app_id">1107757105928354</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">efd14c5c8d696d37a816050ee4633f5d</string>
+    <string name="ak_login_protocol_scheme">ak1107757105928354</string>
+</resources>
